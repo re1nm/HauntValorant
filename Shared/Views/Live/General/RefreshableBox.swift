@@ -8,7 +8,8 @@ struct RefreshableBox<Content: View>: View {
 	var refresh: (ValorantClient) async throws -> Void
 	
 	@Environment(\.valorantLoad) private var load
-	
+	@Environment(\.tabSwiper) private var tabSwiper
+
 	var body: some View {
 		VStack(spacing: 0) {
 			HStack {
@@ -37,7 +38,12 @@ struct RefreshableBox<Content: View>: View {
 		}
 		.background(Color.secondaryGroupedBackground)
 		.cornerRadius(20)
-		.task(doRefresh)
+		.task {
+			// hold off while the tab is still sliding in, so the results don't make it redraw mid-slide
+			await tabSwiper?.waitUntilSettled()
+			guard !Task.isCancelled else { return } // slid away again
+			await doRefresh()
+		}
 		.onSceneActivation(perform: doRefresh)
 	}
 	

@@ -58,9 +58,10 @@ extension FetchingIntentTimelineProvider {
 		var location: Location?
 		let result: Result<Value, Error>
 		do {
-			guard await Managers.store.ownsProVersion else {
-				throw WidgetError.needProVersion
-			}
+			// Pro is unlocked in this build, like in the app (see `ownsProVersion` in ReconBoltApp.swift)
+			//guard await Managers.store.ownsProVersion else {
+			//	throw WidgetError.needProVersion
+			//}
 			
 			await Managers.assets.tryLoadAssets()
 			

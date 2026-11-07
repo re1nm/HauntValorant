@@ -5,7 +5,9 @@ struct UserCell: View {
 	let userID: User.ID
 	@Binding var isSelected: Bool
 	var shouldAutoUpdate = false
-	
+	/// for the player's own match list, which is where the career tab starts out
+	var allowsSwipingBetweenTabs = false
+
 	@LocalData var user: User?
 	@LocalData var identity: Player.Identity?
 	@LocalData var summary: CareerSummary?
@@ -15,6 +17,7 @@ struct UserCell: View {
 		
 		TransparentNavigationLink(isActive: $isSelected) {
 			MatchListView(userID: userID)
+				.swipingBetweenTabs(isEnabled: allowsSwipingBetweenTabs)
 		} label: {
 			HStack(spacing: 10) {
 				if let identity {

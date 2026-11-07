@@ -16,6 +16,7 @@ struct ViewRankWidget: Widget {
 				.environment(\.location, entry.location)
 		}
 		.supportedFamilies([.systemSmall, .systemMedium])
+		.contentMarginsDisabled() // the layout has its own padding
 		.configurationDisplayName(Text("Rank", comment: "Rank Widget: title"))
 		.description(Text("View your current rank.", comment: "Rank Widget: description"))
 	}
@@ -42,7 +43,7 @@ struct RankEntryView: TimelineEntryView {
 		}
 		.padding()
 		.foregroundColor(.white)
-		.background {
+		.widgetBackground {
 			RankInfoView.darkenedBackground(for: info.tierInfo)
 		}
 	}

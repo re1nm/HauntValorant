@@ -9,14 +9,15 @@ struct SettingsView: View {
 	@ObservedObject var store: InAppStore
 	
 	@StateObject var iconManager = AppIconManager()
-	
+	@StateObject var signIn = SignInPresenter()
+
 	@Namespace private var storefrontID
 	
 	var body: some View {
 		ScrollViewReader { scrollView in
 			Form {
-				AccountSettingsView(accountManager: accountManager)
-				
+				AccountSettingsView(accountManager: accountManager, signIn: signIn)
+
 				Section(header: Text("Settings", comment: "Settings: section")) {
 					mainSettings()
 					
@@ -44,6 +45,7 @@ struct SettingsView: View {
 					ListLink("Join the Discord Server", icon: "bubble.left.and.bubble.right", destination: "https://discord.gg/bwENMNRqNa")
 				}
 			}
+			.signInSheet(signIn, accountManager: accountManager)
 			.deepLinkHandler { deepLink in
 				guard case .inApp(.storefront) = deepLink else { return }
 				withAnimation {

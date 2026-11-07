@@ -72,8 +72,7 @@ final class LocalDataProvider {
 	
 	// TODO: still not super happy with these tbh
 	static func dataFetched(_ details: MatchDetails) {
-		// match details leave names empty nowadays, which shouldn't replace names we already know
-		shared.store(details.players.filter { !$0.gameName.isEmpty }.map(\.identity), asOf: details.matchInfo.gameStart)
+		shared.store(details.players.map(\.identity), asOf: details.matchInfo.gameStart)
 	}
 	
 	static func dataFetched(_ info: LivePregameInfo) {

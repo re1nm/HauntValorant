@@ -3,8 +3,9 @@ import ValorantAPI
 
 struct AccountSettingsView: View {
 	@ObservedObject var accountManager: AccountManager
-	
-	@State var loginTarget: LoginTarget?
+	/// shows the sign-in sheet, which can't hang off these form rows (see ``SignInPresenter``)
+	var signIn: SignInPresenter
+
 	@State var isConfirmingSignOut = false
 	@Environment(\.ownsProVersion) private var ownsProVersion
 	
@@ -17,18 +18,14 @@ struct AccountSettingsView: View {
 			} footer: {
 				legalBoilerplate
 			}
-			.sheet(item: $loginTarget) { _ in
-				LoginForm(accountManager: accountManager)
-					.withLoadErrorAlerts()
-			}
-			
+
 			Section {
 				if accountManager.activeAccount?.session.hasExpired == true {
 					HStack {
 						Text("Session expired!", comment: "Account Settings: shown when the current account's session has expired")
 						Spacer()
 						Button {
-							loginTarget = .sessionRefresh
+							signIn.start(for: .sessionRefresh)
 						} label: {
 							Text("Refresh", comment: "Account Settings: button to refresh expired session")
 						}
@@ -64,7 +61,7 @@ struct AccountSettingsView: View {
 			Text("Not signed in yet.", comment: "Account Settings")
 			
 			Button {
-				loginTarget = .firstAccount
+				signIn.start(for: .firstAccount)
 			} label: {
 				Text("Sign In", comment: "Account Settings: button")
 			}
@@ -78,7 +75,7 @@ struct AccountSettingsView: View {
 			.moveDisabled(!ownsProVersion)
 			
 			Button {
-				loginTarget = .extraAccount
+				signIn.start(for: .extraAccount)
 			} label: {
 				HStack {
 					Label {
@@ -106,7 +103,7 @@ struct AccountSettingsView: View {
 			.foregroundStyle(.secondary)
 			.frame(maxWidth: .infinity, alignment: .leading)
 	}
-	
+
 	enum LoginTarget: Hashable, Identifiable {
 		case firstAccount
 		case extraAccount
@@ -170,9 +167,9 @@ struct ProExclusiveBadge: View {
 #if DEBUG
 struct AccountSettingsView_Previews: PreviewProvider {
 	static var previews: some View {
-		List { AccountSettingsView(accountManager: .mocked) }
+		List { AccountSettingsView(accountManager: .mocked, signIn: .init()) }
 			.withToolbar()
-		List { AccountSettingsView(accountManager: .mockEmpty) }
+		List { AccountSettingsView(accountManager: .mockEmpty, signIn: .init()) }
 			.withToolbar()
 	}
 }

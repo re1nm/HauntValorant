@@ -99,8 +99,20 @@ struct MatchListView: View {
 		.withLocalData($matchList, id: userID, shouldAutoUpdate: true)
 		.withLocalData($summary, id: userID, shouldAutoUpdate: true)
 		.withLocalData($identity, id: userID)
+		.task(id: matchList?.matches.first?.id) { await recoverMissingIdentity() }
 		.anonymizing(additionally: shouldAnonymize(userID) ? .all : .none)
 		.navigationTitle(title)
+	}
+
+	/// Identities are only stored when match details are first fetched, so if one went missing (an earlier version dropped them all), take it from the latest cached match instead.
+	private func recoverMissingIdentity() async {
+		let provider = LocalDataProvider.shared
+		guard await provider.playerIdentityManager.cachedObject(for: userID) == nil else { return }
+		for match in (matchList?.matches ?? []).prefix(10) {
+			guard let details = await provider.matchDetailsManager.cachedObject(for: match.id) else { continue }
+			LocalDataProvider.dataFetched(details)
+			return
+		}
 	}
 	
 	var title: Text {

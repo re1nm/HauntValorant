@@ -16,6 +16,7 @@ struct ViewMissionsWidget: Widget {
 				.reloadingOnTap(.viewMissions)
 		}
 		.supportedFamilies([.systemMedium])
+		.contentMarginsDisabled() // the layout has its own padding
 		.configurationDisplayName(Text("Missions", comment: "Missions Widget: title"))
 		.description(Text("Check your progress on daily & weekly missions.", comment: "Missions Widget: description"))
 	}
@@ -48,7 +49,7 @@ struct MissionListView: TimelineEntryView {
 		}
 		.frame(maxWidth: .infinity, maxHeight: .infinity)
 		.padding()
-		.background(Color.groupedBackground)
+		.widgetBackground { Color.groupedBackground }
 	}
 	
 	@ViewBuilder
@@ -76,7 +77,7 @@ struct MissionListView: TimelineEntryView {
 			.background(Color.secondaryGroupedBackground)
 			.cornerRadius(8)
 			
-			if let queued = contracts.queuedUpWeeklies {
+			if let queued = contracts.queuedUpWeeklies, !queued.isEmpty {
 				Text("+\(queued.count) queued", comment: "Missions Widget: how many more weeklies are queued up after the current set")
 					.font(.footnote)
 					.foregroundStyle(.secondary)
@@ -118,19 +119,6 @@ struct MissionListView: TimelineEntryView {
 		}
 	}
 }
-
-/*
-extension View {
-	@ViewBuilder
-	func withWidgetBackground() -> some View {
-		if #available(iOSApplicationExtension 17.0, *) {
-			containerBackground(.background, for: .widget)
-		} else {
-			self
-		}
-	}
-}
- */
 
 struct MissionView: View {
 	var missionInfo: MissionInfo

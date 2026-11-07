@@ -35,6 +35,7 @@ extension TimelineEntryView {
 				.multilineTextAlignment(.center)
 				.foregroundColor(.secondary)
 				.padding()
+				.widgetBackground(.background)
 			}
 		}
 		.accentColor(Color("AccentColor"))
@@ -45,6 +46,27 @@ extension TimelineEntryView {
 extension View {
 	func reloadingOnTap(_ kind: WidgetKind) -> some View {
 		environment(\.reloadKind, kind)
+	}
+
+	/// Fills in behind the widget's contents. iOS 17 and later require widgets to do this through `containerBackground` (so the system can e.g. take it away in StandBy), and show an error in place of widgets that don't.
+	@ViewBuilder
+	func widgetBackground<Background: View>(@ViewBuilder _ makeBackground: () -> Background) -> some View {
+		let background = makeBackground()
+		if #available(iOS 17.0, *) {
+			containerBackground(for: .widget) { background }
+		} else {
+			self.background { background }
+		}
+	}
+
+	/// Fills in behind the widget's contents. iOS 17 and later require widgets to do this through `containerBackground` (so the system can e.g. take it away in StandBy), and show an error in place of widgets that don't.
+	@ViewBuilder
+	func widgetBackground<Style: ShapeStyle>(_ style: Style) -> some View {
+		if #available(iOS 17.0, *) {
+			containerBackground(style, for: .widget)
+		} else {
+			background(style)
+		}
 	}
 }
 

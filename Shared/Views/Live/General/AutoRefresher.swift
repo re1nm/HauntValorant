@@ -4,7 +4,9 @@ struct AutoRefresher: View {
 	@State private var isFilledUp = true
 	
 	var refreshAction: () async -> Void
-	
+
+	@Environment(\.tabSwiper) private var tabSwiper
+
 	var body: some View {
 		let strokeStyle = StrokeStyle(lineWidth: 4, lineCap: .round)
 		
@@ -16,6 +18,8 @@ struct AutoRefresher: View {
 			.background(Circle().stroke(.quaternary, style: strokeStyle))
 			.frame(width: 20, height: 20)
 			.task {
+				// hold off while the tab is still sliding in, so the results don't make it redraw mid-slide
+				await tabSwiper?.waitUntilSettled()
 				while !Task.isCancelled {
 					await refreshAction()
 					

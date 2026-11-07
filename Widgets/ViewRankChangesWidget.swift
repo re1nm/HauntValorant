@@ -15,6 +15,7 @@ struct ViewRankChangesWidget: Widget {
 				.environment(\.location, entry.location)
 		}
 		.supportedFamilies([.systemSmall, .systemMedium])
+		.contentMarginsDisabled() // the chart reaches all the way to the edges
 		.configurationDisplayName(Text("Rank Changes", comment: "Rank Changes Widget: title"))
 		.description(Text("View your rank rating changes.", comment: "Rank Changes Widget: description"))
 	}
@@ -34,6 +35,7 @@ struct RankChangesEntryView: TimelineEntryView {
 			matches: info.matches.matches,
 			maxCount: isSmall ? 10 : 20
 		)
+		.widgetBackground(.background)
 	}
 }
 

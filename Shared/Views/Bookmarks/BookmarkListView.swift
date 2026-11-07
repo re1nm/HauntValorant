@@ -76,7 +76,12 @@ struct BookmarkListView: View {
 	@ViewBuilder
 	func userCell(id: User.ID?, shouldAutoUpdate: Bool = false) -> some View {
 		let tag = SelectedBookmark(userID: id)
-		UserCell(userID: id ?? userID, isSelected: $selection.equals(tag), shouldAutoUpdate: shouldAutoUpdate)
+		UserCell(
+			userID: id ?? userID,
+			isSelected: $selection.equals(tag),
+			shouldAutoUpdate: shouldAutoUpdate,
+			allowsSwipingBetweenTabs: id == nil // the own match list is where the career tab starts out
+		)
 			.id(tag)
 	}
 }
