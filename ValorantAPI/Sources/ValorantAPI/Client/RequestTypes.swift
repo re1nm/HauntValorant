@@ -42,6 +42,8 @@ extension GameDataRequest {
 enum BaseURLs {
 	static let authAPI = URL(string: "https://auth.riotgames.com")!
 	static let entitlementsAPI = URL(string: "https://entitlements.auth.riotgames.com/api")!
+	/// Riot's account service, e.g. for looking up players by Riot ID
+	static let accountAPI = URL(string: "https://api.account.riotgames.com")!
 	
 	static func gameAPI(location: Location) -> URL {
 		URL(string: "https://pd.\(location.shard).a.pvp.net")!

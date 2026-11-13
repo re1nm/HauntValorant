@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		B902823426A7A8A9004B1740 /* HenrikAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = B902823326A7A8A9004B1740 /* HenrikAPI.swift */; };
 		B909D294292361E0003A53D9 /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = B909D293292361E0003A53D9 /* AppSettings.swift */; };
 		B90B4B52267C112F00CACB95 /* CompetitiveTier.swift in Sources */ = {isa = PBXBuildFile; fileRef = B90B4B51267C112F00CACB95 /* CompetitiveTier.swift */; };
 		B90B4B55267C139300CACB95 /* AssetCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = B90B4B54267C139300CACB95 /* AssetCollection.swift */; };
@@ -397,7 +396,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		B902823326A7A8A9004B1740 /* HenrikAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HenrikAPI.swift; sourceTree = "<group>"; };
 		B909D293292361E0003A53D9 /* AppSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettings.swift; sourceTree = "<group>"; };
 		B90B4B51267C112F00CACB95 /* CompetitiveTier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompetitiveTier.swift; sourceTree = "<group>"; };
 		B90B4B54267C139300CACB95 /* AssetCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetCollection.swift; sourceTree = "<group>"; };
@@ -963,7 +961,6 @@
 				B9131D60266A707600E85F46 /* ValorantLoadManager.swift */,
 				B9EE0002267EDCB100C08119 /* LocalDataManager.swift */,
 				B9168AE52689440B00866F6A /* LocalDataProvider.swift */,
-				B902823326A7A8A9004B1740 /* HenrikAPI.swift */,
 				B909D293292361E0003A53D9 /* AppSettings.swift */,
 				B9F7FBC42935C7A30022F5CE /* InAppStore.swift */,
 				B939C81D294A5A4900ABD0C6 /* WidgetLink.swift */,
@@ -1835,7 +1832,6 @@
 				B96A0CAA265AE32200844674 /* MissionAssets.swift in Sources */,
 				B9F7FBC32935B6AB0022F5CE /* AccountSettingsView.swift in Sources */,
 				B90E298B29D6595500F26905 /* StorageManagementView.swift in Sources */,
-				B902823426A7A8A9004B1740 /* HenrikAPI.swift in Sources */,
 				B9F7A53927DC5D3D00636DAF /* StoreDetailsView.swift in Sources */,
 				B954A6DB26C8BED200A86CB9 /* WeaponImage.swift in Sources */,
 				B963C47626950FE90071E14A /* RankInfoView.swift in Sources */,

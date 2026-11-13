@@ -10,6 +10,7 @@ struct LookupCell: View {
 	@FocusState private var focusedField: Field?
 	
 	@Environment(\.loadWithErrorAlerts) private var load
+	@Environment(\.valorantLoad) private var valorantLoad
 	
 	@ScaledMetric(relativeTo: .body) private var maxNameFieldWidth = 150
 	@ScaledMetric(relativeTo: .body) private var tagFieldWidth = 50
@@ -79,18 +80,45 @@ struct LookupCell: View {
 	}
 	
 	private func lookUpPlayer(scrollView: ScrollViewProxy) {
+		// pasted names tend to come with stray spaces
+		let gameName = gameName.trimmingCharacters(in: .whitespaces)
+		let tagLine = tagLine.trimmingCharacters(in: .whitespaces)
 		guard !gameName.isEmpty, !tagLine.isEmpty else { return }
 		Task {
 			isLoading = true
+			defer { isLoading = false }
+
+			// looking players up goes through Riot, signed in as the active account
+			var signedInClient: ValorantClient?
+			await valorantLoad { signedInClient = $0 }
+			guard let client = signedInClient else { return }
+
 			let name = "\(gameName) #\(tagLine)"
 			await load(errorTitle: "Could not look up \(name)") {
-				let (user, location) = try await HenrikClient.shared.lookUpPlayer(name: gameName, tag: tagLine)
+				guard let user = try await client.lookUpPlayer(gameName: gameName, tagLine: tagLine) else {
+					throw PlayerLookupError.notFound
+				}
+				// their match history lives in the region they play in, which the lookup doesn't say
+				let location = try await client.findLocation(of: user.id) ?? client.location
 				LocalDataProvider.dataFetched(user)
 				dispatchPrecondition(condition: .onQueue(.main))
 				history.lookedUp(user.id, location: location)
 				scrollView.scrollTo(user.id, anchor: nil) // TODO: this doesn't seem to do anything
 			}
-			isLoading = false
+		}
+	}
+
+	private enum PlayerLookupError: Error, LocalizedError {
+		case notFound
+
+		var errorDescription: String? {
+			switch self {
+			case .notFound:
+				return String(
+					localized: "There's no player with that Riot ID.",
+					comment: "Player Lookup: error when the Riot ID doesn't exist"
+				)
+			}
 		}
 	}
 	
